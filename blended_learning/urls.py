@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """blended_learning URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:

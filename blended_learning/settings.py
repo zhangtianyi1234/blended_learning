@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """
 Django settings for blended_learning project.
 
@@ -12,6 +13,9 @@ https://docs.djangoproject.com/en/1.8/ref/settings/
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
+import sys
+reload(sys)
+sys.setdefaultencoding('utf-8')
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -37,6 +41,8 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'social_auth',
+    'wechat_sdk.context.framework.django',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -100,3 +106,108 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
 
 STATIC_URL = '/static/'
+
+TEMPLATE_CONTEXT_PROCESSORS = (
+    'django.core.context_processors.request',
+    'django.core.context_processors.static',
+    'django.contrib.messages.context_processors.messages',
+    'django.core.context_processors.i18n',
+    # this is required for admin
+    'django.contrib.auth.context_processors.auth',
+    'django.core.context_processors.csrf',
+
+    # Added for django-wiki
+    'django.core.context_processors.media',
+    'django.core.context_processors.tz',
+    'django.contrib.messages.context_processors.messages',
+)
+
+#######################  oauth  ###################################
+AUTHENTICATION_BACKENDS = (
+    'social_auth.backends.contrib.douban.Douban2Backend',
+    'social_auth.backends.contrib.qq.QQBackend',
+    'social_auth.backends.contrib.weibo.WeiboBackend',
+    'social_auth.backends.contrib.renren.RenRenBackend',
+    'social_auth.backends.contrib.baidu.BaiduBackend',
+    'social_auth.backends.contrib.weixin.WeixinBackend',
+    'social_auth.backends.contrib.weixin.WeixinAPPBackend',
+    'social_auth.backends.contrib.chinamobile.ChinaMobileBackend',
+    #'social_oauth.backends.OAuth2Backend',
+    # must add，or django default user cant login
+    'social_oauth.backends.NickNameBackend',
+    'social_oauth.backends.PhoneNumberBackend',
+    'django.contrib.auth.backends.ModelBackend',
+    # use the ratelimit backend to prevent brute force attacks
+    #'ratelimitbackend.backends.RateLimitModelBackend',
+    # remove ratelimit for lms
+    'rateunlimitbackend.backends.RateUnLimitModelBackend',
+)
+
+TEMPLATE_CONTEXT_PROCESSORS += (
+    'django.contrib.auth.context_processors.auth',
+    # login in htemplate can use "{% url socialauth_begin 'douban-oauth2' %}"
+    'social_auth.context_processors.social_auth_by_type_backends',
+    'social_auth.context_processors.social_auth_login_redirect',
+)
+
+
+SOCIAL_AUTH_PIPELINE = (
+    'social.pipeline.social_auth.social_details',
+    'social.pipeline.social_auth.social_uid',
+    'social.pipeline.social_auth.auth_allowed',
+    'social.pipeline.partial.save_status_to_session',
+    'social.pipeline.social_auth.save_authentication_user_detail_to_session',
+)
+
+
+SOCIAL_AUTH_DISCONNECT_PIPELINE = (
+    # Verifies that the social association can be disconnected from the current
+    # user (ensure that the user login mechanism is not compromised by this
+    # disconnection).
+    'social.pipeline.disconnect.allowed_to_disconnect',
+    # Collects the social associations to disconnect.
+    'social.pipeline.disconnect.get_entries',
+    # Revoke any access_token when possible.
+    'social.pipeline.disconnect.revoke_tokens',
+    # Removes the social associations.
+    'social.pipeline.disconnect.disconnect'
+)
+
+SOCIAL_AUTH_LOGIN_URL = '/login-url'
+SOCIAL_AUTH_LOGIN_ERROR_URL = '/login-error'
+SOCIAL_AUTH_LOGIN_REDIRECT_URL = '/logged-in'
+SOCIAL_AUTH_NEW_USER_REDIRECT_URL = '/new-users-redirect-url'
+SOCIAL_AUTH_NEW_ASSOCIATION_REDIRECT_URL = '/oauth/newassociation'
+SOCIAL_AUTH_BACKEND_ERROR_URL = '/new-error-url'
+SOCIAL_AUTH_AUTHENTICATION_SUCCESS_URL = '/oauth/authentication/success'
+
+SOCIAL_AUTH_WEIBO_KEY = '2021069109'
+SOCIAL_AUTH_WEIBO_SECRET = '228e875f9f7b1c7d6eb33146cf75ae95'
+SOCIAL_AUTH_WEIBO_AUTH_EXTRA_ARGUMENTS = {'forcelogin': 'true'}
+SOCIAL_AUTH_WEIBO_FIELDS_STORED_IN_SESSION = ['enrollment_action', 'course_id', 'inviter_id']
+SOCIAL_AUTH_QQ_KEY = '101148549'
+SOCIAL_AUTH_QQ_SECRET = '9aabfe532957ffdda3e97b894da244c2'
+SOCIAL_AUTH_QQ_FIELDS_STORED_IN_SESSION = ['enrollment_action', 'course_id', 'inviter_id']
+SOCIAL_AUTH_MOBILE_QQ_OAUTH_CONSUMER_KEY = '1101680520'
+
+SOCIAL_AUTH_DOUBAN_OAUTH2_KEY = '00ef0d07e48eb67a02cd2717adac236e'
+SOCIAL_AUTH_DOUBAN_OAUTH2_SECRET = 'a1dd00279d48fa0d'
+SOCIAL_AUTH_DOUBAN_FIELDS_STORED_IN_SESSION = ['enrollment_action', 'course_id']
+
+SOCIAL_AUTH_RENREN_KEY = '2697bb7e7461417bb7102049710b39a5'
+SOCIAL_AUTH_RENREN_SECRET = 'dbd397d5d74e45069c2a114c4f3b6517'
+SOCIAL_AUTH_RENREN_FIELDS_STORED_IN_SESSION = ['enrollment_action', 'course_id']
+
+SOCIAL_AUTH_BAIDU_KEY = 'hj4ghoSGSQobfyGdE9GSHuhO'
+SOCIAL_AUTH_BAIDU_SECRET = 'yntelunSKka4VaG4m3wgzoEwYzgujL71'
+SOCIAL_AUTH_BAIDU_FIELDS_STORED_IN_SESSION = ['enrollment_action', 'course_id']
+
+SOCIAL_AUTH_WEIXIN_KEY = 'wxccea2c54ef6ceb42'
+SOCIAL_AUTH_WEIXIN_SECRET = '8447033b55628e87ed830ef2a246a752'
+SOCIAL_AUTH_WEIXIN_SCOPE = ['snsapi_login',]
+SOCIAL_AUTH_WEIXIN_FIELDS_STORED_IN_SESSION = ['enrollment_action', 'course_id']
+
+SOCIAL_AUTH_WEIXINAPP_KEY = 'wx33773d39d757855c'
+SOCIAL_AUTH_WEIXINAPP_SECRET = 'e6981ac9ec5ad613229eae70a1269478'
+SOCIAL_AUTH_WEIXINAPP_SCOPE = ['snsapi_userinfo',]
+SOCIAL_AUTH_WEIXINAPP_FIELDS_STORED_IN_SESSION = ['enrollment_action', 'course_id']
