@@ -41,9 +41,25 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    # 'social_auth',
+    # 'blended_learning',
+    'gunicorn',
+    # 'wechat_sdk.context.framework.django',
+    'wechat_sdk',
+
+    # External auth (OpenID, shib)
+    'external_auth',
+    'django_openid_auth',
     'social_auth',
-    'wechat_sdk.context.framework.django',
+    'social.apps.django_app.default',
+    'social_oauth',
+
+    # OAuth2 Provider
+    'provider',
+    'provider.oauth2',
 )
+##################### LinkedIn #####################
+INSTALLED_APPS += ('django_openid_auth',)
 
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -123,6 +139,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 )
 
 #######################  oauth  ###################################
+
 AUTHENTICATION_BACKENDS = (
     'social_auth.backends.contrib.douban.Douban2Backend',
     'social_auth.backends.contrib.qq.QQBackend',
@@ -142,6 +159,7 @@ AUTHENTICATION_BACKENDS = (
     # remove ratelimit for lms
     'rateunlimitbackend.backends.RateUnLimitModelBackend',
 )
+
 
 TEMPLATE_CONTEXT_PROCESSORS += (
     'django.contrib.auth.context_processors.auth',
@@ -211,3 +229,9 @@ SOCIAL_AUTH_WEIXINAPP_KEY = 'wx33773d39d757855c'
 SOCIAL_AUTH_WEIXINAPP_SECRET = 'e6981ac9ec5ad613229eae70a1269478'
 SOCIAL_AUTH_WEIXINAPP_SCOPE = ['snsapi_userinfo',]
 SOCIAL_AUTH_WEIXINAPP_FIELDS_STORED_IN_SESSION = ['enrollment_action', 'course_id']
+
+#################### cc video ###########################
+CC_USERID = "44B36C7761D3412F"
+CC_APIKEY = "bySAR5lIFZEx08SKoYLQfNGjZMGx71cQ"
+CC_USERID_WM = "33364CBCE093F751"
+CC_APIKEY_WM = "EZDEoheXT3REepELsQtwDA3PvZDKEJa3"

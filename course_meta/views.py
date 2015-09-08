@@ -1,29 +1,34 @@
 # -*- coding: utf-8 -*-
-import hashlib
-import json
-from django.utils.encoding import smart_str
 from django.views.decorators.csrf import csrf_exempt
-from django.http import HttpResponse, HttpResponseBadRequest
 
 from wechat_sdk import WechatBasic
-from wechat_sdk.exceptions import ParseError
 from wechat_sdk.messages import TextMessage
 from wechat_sdk.messages import (
     TextMessage, VoiceMessage, ImageMessage, VideoMessage, LinkMessage, LocationMessage, EventMessage
 )
-
-from weixin import *
-
-WECHAT_TOKEN = 'zqxt'
-AppID = ''
-AppSecret = ''
-
-# 实例化 WechatBasic
-wechat_instance = WechatBasic(
-    token=WECHAT_TOKEN,
-    appid=AppID,
-    appsecret=AppSecret
-)
+from weixin.weixin import *
+from django.conf import settings
+from django.contrib.auth import logout, authenticate, login
+from django.contrib.auth.models import User, AnonymousUser
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.views import password_reset_confirm, password_reset_complete
+from django.core.cache import cache
+from django.core.context_processors import csrf, get_token as csrf_get_token
+from django.contrib import messages
+from django.core.mail import send_mail
+from django.core.urlresolvers import reverse
+from django.core.validators import validate_email, validate_slug, ValidationError
+from django.core.exceptions import ObjectDoesNotExist
+from django.db import IntegrityError, transaction
+from django.http import (HttpResponse, HttpResponseBadRequest, HttpResponseForbidden,
+                         Http404, HttpResponseRedirect)
+from django.shortcuts import redirect
+from django.utils.translation import ungettext
+from django.utils.http import cookie_date, base36_to_int
+from django.utils.translation import ugettext as _, get_language
+from django.views.decorators.cache import never_cache
+from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_POST, require_GET
 
 @csrf_exempt
 def index(request):
@@ -45,8 +50,6 @@ def index(request):
     # 实例化 wechat
     wechat = WechatBasic(token=token)
     # 对签名进行校验
-    if not wechat_instance.check_signature(signature=signature, timestamp=timestamp, nonce=nonce):
-        return HttpResponseBadRequest('Verify Failed')
     if wechat.check_signature(signature=signature, timestamp=timestamp, nonce=nonce):
         # 对 XML 数据进行解析 (必要, 否则不可执行 response_text, response_image 等操作)
         wechat.parse_data(body_text)
@@ -87,3 +90,8 @@ def index(request):
 
         # 现在直接将 response 变量内容直接作为 HTTP Response 响应微信服务器即可，此处为了演示返回内容，直接将响应进行输出
         print response
+
+@login_required
+def create_course(request):
+    #老师创建课程的方法
+    pass
