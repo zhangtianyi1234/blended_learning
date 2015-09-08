@@ -19,5 +19,7 @@ from django.contrib import admin
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
-    url(r'^$','course_meta.views.index'),
+    # url(r'^$','course_meta.views.index'),
+    # url(r'^weixin/','weixin.views.weixin'),
+    url(r'^$','weixin.views.weixin'),
 ]

@@ -29,6 +29,7 @@ from django.utils.translation import ugettext as _, get_language
 from django.views.decorators.cache import never_cache
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST, require_GET
+from django.shortcuts import render_to_response
 
 @csrf_exempt
 def index(request):
@@ -90,6 +91,7 @@ def index(request):
 
         # 现在直接将 response 变量内容直接作为 HTTP Response 响应微信服务器即可，此处为了演示返回内容，直接将响应进行输出
         print response
+        return render_to_response('index.html',response)
 
 @login_required
 def create_course(request):

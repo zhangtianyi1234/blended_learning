@@ -48,18 +48,18 @@ INSTALLED_APPS = (
     'wechat_sdk',
 
     # External auth (OpenID, shib)
-    'external_auth',
-    'django_openid_auth',
+    # 'external_auth',
+    # 'django_openid_auth',
     'social_auth',
     'social.apps.django_app.default',
     'social_oauth',
 
     # OAuth2 Provider
-    'provider',
-    'provider.oauth2',
+    # 'provider',
+    # 'provider.oauth2',
 )
 ##################### LinkedIn #####################
-INSTALLED_APPS += ('django_openid_auth',)
+# INSTALLED_APPS += ('django_openid_auth',)
 
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -89,6 +89,7 @@ TEMPLATES = [
         },
     },
 ]
+TEMPLATES_DIRS =(BASE_DIR+'/templates',)
 
 WSGI_APPLICATION = 'blended_learning.wsgi.application'
 
@@ -235,3 +236,11 @@ CC_USERID = "44B36C7761D3412F"
 CC_APIKEY = "bySAR5lIFZEx08SKoYLQfNGjZMGx71cQ"
 CC_USERID_WM = "33364CBCE093F751"
 CC_APIKEY_WM = "EZDEoheXT3REepELsQtwDA3PvZDKEJa3"
+
+#################### static server ###########################
+STATIC_SERVER_INTRANET_HOST = 'http://gfsclient.xuetangx.info' # 最后不要有斜线
+#STATIC_SERVER_INTRANET_HOST = 'http://10.0.0.113' # 最后不要有斜线
+STATIC_SERVER_HOST = 'http://storage.xuetangx.com'
+UPLOAD_AVATAR_PATH = os.path.join(STATIC_SERVER_INTRANET_HOST, 'upload/blended_learning/users/info/avatar')
+PUBLIC_AVATAR_PATH = os.path.join(STATIC_SERVER_HOST, 'blended_learning/users/info/avatar')
+DEFAULT_AVATAR_URL = os.path.join(STATIC_SERVER_HOST, 'xuetangx/users/info/avatar/default.png')
