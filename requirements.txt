@@ -1,9 +1,8 @@
 #requirements of the platform
-tig
 wechat-sdk
 jsonfield
-supervisor
-gunicorn==0.17.4
+#gunicorn==0.17.4
+uwsgi
 oauthlib==0.6.3
 lxml==3.3.6
 lazy==1.1
@@ -15,6 +14,7 @@ html5lib==0.999
 mako==0.9.1
 Markdown==2.2.1
 networkx==1.7
+setuptools==9.1 #for ntlk https://github.com/nltk/nltk/issues/824
 nltk==2.0.4
 pip>=1.4
 pytz==2012h
@@ -35,3 +35,4 @@ watchdog==0.7.1
 #sudo apt-get install uwsgi
 #sudo apt-get install libxml2
 #sudo apt-get install libxml2-dev
+#tig
