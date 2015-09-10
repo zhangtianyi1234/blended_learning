@@ -43,7 +43,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     # 'social_auth',
     # 'blended_learning',
-    'gunicorn',
+    # 'gunicorn',
     # 'wechat_sdk.context.framework.django',
     'wechat_sdk',
 
